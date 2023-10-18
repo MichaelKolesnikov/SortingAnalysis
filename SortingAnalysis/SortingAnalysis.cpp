@@ -7,26 +7,21 @@
 
 using namespace std;
 
-void EnterTheAverageOperatingTimeIntoTheTable(function<vector<int>(const vector<int>&)> sortFunction, int n, vector<vector<float>>& timeResults, int sortNumber, int nNumber, int countOfTests)
-{
+void EnterTheAverageOperatingTimeIntoTheTable(function<vector<int>(const vector<int>&)> sortFunction, int n, vector<vector<float>>& timeResults, int sortNumber, int nNumber, int countOfTests) {
 	float averageTime = -1;
 	vector<int> sequence(n);
-	for (int measureNumber = 1; measureNumber <= countOfTests; ++measureNumber)
-	{
-		for (auto& it : sequence) 
-		{
+	for (int measureNumber = 1; measureNumber <= countOfTests; ++measureNumber) {
+		for (auto& it : sequence) {
 			it = rand();
 		}
 		auto start = chrono::high_resolution_clock().now();
 		auto tmp = sortFunction(sequence);
 		auto end = chrono::high_resolution_clock().now();
 		chrono::duration<float> duration = end - start;
-		if (measureNumber == 1)
-		{
+		if (measureNumber == 1) {
 			averageTime = duration.count();
 		}
-		else
-		{
+		else {
 			averageTime = ((measureNumber - 1) * averageTime + duration.count()) / measureNumber;
 			// ans[i] = ((i - 1)*ans[i - 1] + a[i]) / i
 		}
@@ -34,8 +29,7 @@ void EnterTheAverageOperatingTimeIntoTheTable(function<vector<int>(const vector<
 	timeResults[sortNumber][nNumber] = averageTime;
 }
 
-int main()
-{
+int main() {
 	Sorter<int> sorter([](int a, int b) {return b - a;});
 	vector<string> sortingNamesN2 = { "Bubble" };
 	vector<string> sortingNamesNLogN = { "Merge" };
@@ -53,8 +47,7 @@ int main()
 	vector<vector<thread>> threads(countSortingMethods);
 
 	int sortNumber = 0;
-	for (int nNumber = 0; nNumber < nForN2.size(); ++nNumber)
-	{
+	for (int nNumber = 0; nNumber < nForN2.size(); ++nNumber) {
 		int currentN = n[nNumber];
 		int countOfTests = nForN2.size() - nNumber;
 		function<vector<int>(const vector<int>&)> sortFunction = [&sorter](const vector<int>& sequence) {return sorter.Bubble(sequence);};
@@ -64,8 +57,7 @@ int main()
 		sortNumber = 0;
 	}
 	sortNumber = sortingNamesN2.size();
-	for (int nNumber = 0; nNumber < n.size(); ++nNumber)
-	{
+	for (int nNumber = 0; nNumber < n.size(); ++nNumber) {
 		int currentN = n[nNumber];
 		int countOfTests = n.size() - nNumber;
 		function<vector<int>(const vector<int>&)> sortFunction = [&sorter](const vector<int>& sequence) { return sorter.Quick(sequence);};
@@ -75,18 +67,14 @@ int main()
 		sortNumber = sortingNamesN2.size();
 	}
 
-	for (auto& v : threads)
-	{
-		for (auto& th : v)
-		{
+	for (auto& v : threads) {
+		for (auto& th : v) {
 			th.join();
 		}
 	}
 
-	for (auto& v : timeResults)
-	{
-		for (auto& it : v)
-		{
+	for (auto& v : timeResults) {
+		for (auto& it : v) {
 			cout << it << ' ';
 		}
 		cout << endl;

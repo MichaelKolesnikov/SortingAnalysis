@@ -22,7 +22,7 @@ TEST(Sorter, N2)
 		for (auto& sortedSequence : vector<vector<int>> 
 			{
 			sorter.Bubble(sequence), 
-			sorter.IterativeMergeSort(sequence)
+			sorter.Quick(sequence)
 			})
 		{
 			for (int i = 0; i < n - 1; ++i) 
